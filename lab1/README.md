@@ -20,7 +20,7 @@ By the end of this lab, you will be able to:
 
 ### 1.1 Install Git
 ```bash
-sudo yum install -y git
+sudo yum install -y git tree nano
 ```
 
 ### 1.2 Configure Git (use your GitHub credentials)

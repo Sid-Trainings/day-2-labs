@@ -35,7 +35,11 @@ cd flask-sample-webapp
 
 You should see:
 ```
+README.md
 app.py
+app.yaml
+app_test.py
+requirements-test.txt
 requirements.txt
 templates/
   index.html
@@ -77,6 +81,7 @@ CMD ["python", "app.py"]
 
 Save and exit.
 
+>Press **Crtl+O** --> **Enter** and **Crtl+X** to save the file in nano editor
 ---
 
 ## 🛠️ Step 4: Build Docker Image
