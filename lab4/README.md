@@ -12,6 +12,15 @@ By the end of this lab, you will be able to:
 - Docker Hub account
 
 ---
+## Docker Hub Account Creation
+In your desktop go to following address:
+> https://hub.docker.com/
+- Click on Sign Up
+- Select **Personal Tab**
+- Enter your email address
+- Put your desired Username
+- Enter your password
+- Click on Sign Up
 
 ## 👤 Step 1: Login to Docker Hub
 ```bash
