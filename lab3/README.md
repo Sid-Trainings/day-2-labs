@@ -1,3 +1,52 @@
+# Lab 3: Clone and Containerize Flask Web App
+
+## 🧠 Objective
+By the end of this lab, you will be able to:
+- Clone a Flask app from GitHub
+- Understand the app’s folder structure
+- Add a Dockerfile
+- Build and run the Flask app as a container
+
+---
+
+## 🔧 Prerequisites
+- Docker installed (Lab 1)
+- Git configured (Lab 1)
+
+---
+
+## 📁 Step 1: Clone the Flask Web App Repo
+
+### 1.1 Navigate to workspace directory
+```bash
+cd ~
+mkdir devops-labs && cd devops-labs
+```
+
+### 1.2 Clone the Repository
+```bash
+git clone https://github.com/Sid-Trainings/flask-sample-webapp.git
+cd flask-sample-webapp
+```
+
+---
+
+## 🧭 Step 2: Review App Structure
+
+You should see:
+```
+app.py
+requirements.txt
+templates/
+  index.html
+```
+
+- `app.py`: Main Flask app entry point
+- `requirements.txt`: Python dependencies
+- `templates/index.html`: The HTML5 Bootstrap page
+
+---
+
 ## 📦 Step 3: Create Dockerfile
 
 ### 3.1 Create File
