@@ -4,31 +4,29 @@
 By the end of this lab, you will be able to:
 - Create a Jenkins Pipeline for building, testing, and deploying a Dockerized app
 - Trigger the pipeline using GitHub code changes
-- Deploy locally using Docker
+- Deploy the app locally using Docker via Jenkins
 
 ---
 
 ## 🔧 Prerequisites
 - Jenkins is up and running (from Lab 2)
 - Flask app is built and pushed to GitHub (Lab 3)
-- Docker installed on the Jenkins host
+- Docker installed on the host machine (Lab 1)
 
 ---
 
 ## 📁 Step 1: Prepare GitHub Repository
 
-### 1.1 Fork or clone the Flask app repository (if needed)
+### 1.1 Fork or clone the Flask app repository
 ```bash
 git clone https://github.com/Sid-Trainings/flask-sample-webapp.git
 cd flask-sample-webapp
 ```
 
-### 1.2 Push it to your own GitHub repo (once forked)
+### 1.2 Push it to your own GitHub repo
 ```bash
 git remote rename origin upstream
-
 git remote add origin https://github.com/<your-github-username>/flask-sample-webapp.git
-
 git push -u origin main
 ```
 
@@ -39,27 +37,73 @@ git push -u origin main
 1. Go to **Manage Jenkins > Credentials**
 2. Under **(global)**, click **Add Credentials**
 3. Choose **Username and Password**
-4. Add your GitHub username and a **Personal Access Token** (not password)
+4. Add your GitHub username and **Personal Access Token (PAT)**
 5. Save it with an ID like `github-creds`
 
 ---
 
-## 🔄 Step 3: Create Jenkins Pipeline Job
+## 🛠️ Step 3: Recreate Jenkins Container with Docker Access
+
+If Jenkins is running inside Docker, stop and recreate the container with required permissions:
+
+### 3.1 Stop and remove Jenkins
+```bash
+docker stop jenkins
+docker rm jenkins
+```
+
+### 3.2 Run Jenkins as root and mount Docker socket
+```bash
+docker run -d \
+  --name jenkins \
+  -u root \
+  -p 8080:8080 -p 50000:50000 \
+  -v jenkins_home:/var/jenkins_home \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  jenkins/jenkins:lts
+```
+
+---
+
+## 🧰 Step 4: Install Docker CLI Inside Jenkins Container
+
+### 4.1 Enter the container as root
+```bash
+docker exec -u 0 -it jenkins bash
+```
+
+### 4.2 Install Docker
+```bash
+apt update
+apt install -y docker.io
+```
+
+### 4.3 Verify Docker is working
+```bash
+docker version
+```
+> This should show both Docker client and server info (the server comes from host)
+
+Type `exit` to leave the container.
+
+---
+
+## 🔄 Step 5: Create Jenkins Pipeline Job
 
 1. Go to Jenkins Dashboard > **New Item**
 2. Enter job name, select **Pipeline**, click OK
 3. Scroll to **Pipeline section**
 4. Choose **Pipeline script from SCM**
 5. Select **Git**, and enter your GitHub repo URL
-6. Add credentials if prompted
-7. Set the branch (usually `main`)
-8. Save
+6. Use `github-creds` if prompted for credentials
+7. Set the branch to `main`
+8. Save the job
 
 ---
 
-## 📝 Step 4: Add Jenkinsfile to Repo
+## 📝 Step 6: Add Jenkinsfile to GitHub Repo
 
-In the root of your Flask repo, create a file called `Jenkinsfile`:
+In the root of your Flask repo, create a file named `Jenkinsfile`:
 
 ```groovy
 pipeline {
@@ -88,32 +132,39 @@ pipeline {
   }
 }
 ```
-> Make sure to replace `<your-github-username>` accordingly.
 
-Push this Jenkinsfile to your GitHub repo:
+> 🔁 Replace `<your-github-username>` with your actual GitHub username.
+
+### 6.1 Push Jenkinsfile to GitHub
 ```bash
 git add Jenkinsfile
-
 git commit -m "Add Jenkins pipeline"
-
 git push origin main
 ```
 
 ---
 
-## ▶️ Step 5: Run Your Pipeline
+## ▶️ Step 7: Run Your Pipeline
 
-1. Go to your Jenkins job
-2. Click **Build Now**
-3. Watch the console output for each stage
+1. Open Jenkins
+2. Go to your pipeline job
+3. Click **Build Now**
+4. Monitor output in the **Console Output** tab
 
 ---
 
 ## ✅ Verification
-- Open browser: `http://<VM-IP>:5000`
-- Your app should be live and running from the Jenkins-built container
+- In your host browser, visit:
+  ```
+  http://<VM-IP>:5000
+  ```
+- You should see your Flask web app running via a container created by Jenkins
+
+> 💡 Make sure your Flask app uses `app.run(host='0.0.0.0', port=5000)` to allow external access
 
 ---
 
 ## 🚀 What’s Next?
-In Lab 6, you’ll add a stage to push the Docker image to Docker Hub and deploy to Azure App Service.
+In **Lab 6**, you will:
+- Push the Docker image to Docker Hub
+- Deploy it to Azure App Service via Jenkins pipeline
