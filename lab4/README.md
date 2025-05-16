@@ -41,6 +41,16 @@ Example:
 docker tag flask-demo-app sidtrainings/flask-demo-app:v1
 ```
 
+### What are Docker Tags?
+Docker tags are used to assign a unique identifier to a Docker image, allowing you to manage and organize different versions of your images. Tags are essentially aliases for image IDs and can be used to specify versions, variants, or other distinguishing characteristics of an image.
+
+### Tagging an Image
+
+To tag an image in Docker, you can use the ```docker tag``` command. This command creates a new tag for an existing image, allowing you to reference the image by the new tag. The general syntax for the docker tag command is:
+```
+docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
+```
+
 ---
 
 ## ⏫ Step 3: Push the Image to Docker Hub
