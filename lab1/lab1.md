@@ -126,4 +126,4 @@ If you see a success message, Docker is installed correctly.
 ---
 
 ## 🚀 What’s Next?
-Proceed to [Lab 2](./lab2/lab2.md) Setting up Jenkins using Docker.
+Proceed to [Lab 2](../lab2/lab2.md) Setting up Jenkins using Docker.

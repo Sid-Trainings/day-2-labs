@@ -82,4 +82,4 @@ docker run -d -p 8081:5000 your-dockerhub-username/flask-demo-app:v1
 Now, visit http://localhost:8081 (or VM-IP:8081 if running on a remote machine) to see your Flask app in action!
 
 ## 🚀 What’s Next?
-In [Lab 5](./lab5/lab5.md), you will write a Jenkins pipeline to automate image build and deployment.
+In [Lab 5](../lab5/lab5.md), you will write a Jenkins pipeline to automate image build and deployment.

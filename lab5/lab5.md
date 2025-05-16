@@ -195,6 +195,6 @@ git push origin main
 ---
 
 ## 🚀 What’s Next?
-In [Lab 6](./lab6/lab6.md), you will:
+In [Lab 6](../lab6/lab6.md), you will:
 - Push the Docker image to Docker Hub
 - Deploy it to Azure App Service via Jenkins pipeline

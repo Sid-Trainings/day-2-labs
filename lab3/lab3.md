@@ -109,4 +109,4 @@ If the app loads with your styled HTML page and sections (Welcome, Docker Ready,
 ---
 
 ## 🚀 What’s Next?
-In [Lab 4](./lab4/lab4.md), you'll push this Docker image to Docker Hub.
+In [Lab 4](../lab4/lab4.md), you'll push this Docker image to Docker Hub.

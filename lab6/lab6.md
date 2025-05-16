@@ -131,6 +131,6 @@ pipeline {
 
 ---
 ## 🚀 What’s Next?
-In [Lab 7](./lab7/lab7.md), you will:
+In [Lab 7](../lab7/lab7.md), you will:
 - Automatically deploy code to Azure App Service using GitHub integration
 - Trigger a Jenkins job via webhook to build and push a Docker image to Docker Hub
