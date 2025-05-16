@@ -23,12 +23,24 @@ git clone https://github.com/Sid-Trainings/flask-sample-webapp.git
 cd flask-sample-webapp
 ```
 
-### 1.2 Push it to your own GitHub repo
+### 1.2a Push it to your own GitHub repo (if using SSH)
 ```bash
 git remote rename origin upstream
-git remote add origin https://github.com/<your-github-username>/flask-sample-webapp.git
+git remote add origin git@github.com:<your_username>/flask-sample-webapp.git
+git add .
+git commit -m "added Dockerfile"
 git push -u origin main
 ```
+
+### 1.2b Push it to your own GitHub repo (if using HTTP)
+```bash
+git remote rename origin upstream
+git remote add origin [https://github.com/skarkhanis95/flask-sample-webapp.git
+git add .
+git commit -m "added Dockerfile"
+git push -u origin main
+```
+
 
 ---
 
