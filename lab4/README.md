@@ -66,6 +66,20 @@ docker push <your_dockerhub_username>/flask-demo-app:v1
 - Navigate to **Repositories** and confirm your image `flask-demo-app:v1` is listed
 
 ---
+## (OPTIONAL)✅ Step 5: Pull and Run the Image from Docker Hub
+Now that your image is on Docker Hub, you (or anyone) can use it anywhere Docker is installed.
+
+🔽 To pull the image:
+```
+docker pull your-dockerhub-username/flask-demo-app:v1
+```
+Replace ```your-dockerhub-username``` with your actual Docker Hub username.
+
+▶️ To run the container:
+```
+docker run -d -p 8081:5000 your-dockerhub-username/flask-demo-app:v1
+```
+Now, visit http://localhost:8081 (or VM-IP:8081 if running on a remote machine) to see your Flask app in action!
 
 ## 🚀 What’s Next?
 In Lab 5, you will write a Jenkins pipeline to automate image build and deployment.
