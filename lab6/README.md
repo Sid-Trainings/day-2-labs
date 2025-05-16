@@ -1,9 +1,8 @@
-# Lab 6: Jenkins Pipeline – Push to Docker Hub & Deploy to Azure
-
+# Lab 6: Jenkins Pipeline – Push to Docker Hub 
 ## 🧠 Objective
 By the end of this lab, you will be able to:
 - Extend your Jenkins pipeline to push images to Docker Hub
-- Deploy the Docker image to Azure App Service
+
 
 ---
 
@@ -76,98 +75,62 @@ stage('Push to Docker Hub') {
 > Replace `dockerhub-creds` with your actual Jenkins credential ID if different.
 
 ---
+## 📦Step 2.a: Complete Jenkins File Syntax
 
-## ☁️ Step 3: Set Up Azure for Deployment
-
-### 3.1 Login to Azure (manual, first time only)
-```bash
-az login
-```
-
-### 3.2 Create Resource Group
-```bash
-az group create --name DevOpsLabRG --location eastus
-```
-
-### 3.3 Create App Service Plan & Web App
-
-We’ll now deploy our Dockerized Flask app to Azure App Service using a Linux-based plan.
-
-```bash
-# Variables (update with your Docker Hub username)
-RESOURCE_GROUP="DevOpsLabRG"
-PLAN_NAME="DevOpsPlan"
-APP_NAME="flask-webapp-demo" #change this to something unique
-LOCATION="Central India"
-DOCKER_IMAGE="<dockerhub-username>/flask-demo-app:latest"
-
-# Step 1: Create App Service Plan (Linux + B1)
-az appservice plan create \
-  --name $PLAN_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --location "$LOCATION" \
-  --sku B1 \
-  --is-linux
-
-# Step 2: Create Web App with container image
-az webapp create \
-  --resource-group $RESOURCE_GROUP \
-  --plan $PLAN_NAME \
-  --name $APP_NAME \
-  --deployment-container-image-name $DOCKER_IMAGE
-
-# Step 3 (Optional): Disable App Service Storage (recommended for containers)
-az webapp config appsettings set \
-  --resource-group $RESOURCE_GROUP \
-  --name $APP_NAME \
-  --settings WEBSITES_ENABLE_APP_SERVICE_STORAGE=false
-```
->💡 Replace <dockerhub-username> with your actual Docker Hub handle (e.g., skarkhanis96).
----
-
-## 🧪 Step 4: Add Azure Deployment Stage to Jenkinsfile (Optional Automation)
-
-If Azure CLI is available on the Jenkins host/container, you can automate deployment:
-
+If you need complete ```Jenkins``` file here is the syntax:
 ```groovy
-stage('Deploy to Azure') {
-  steps {
-    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-      sh '''
-        az webapp config container set \
-          --name flask-webapp-demo \
-          --resource-group DevOpsLabRG \
-          --docker-custom-image-name $DOCKER_USER/flask-demo-app:latest
-      '''
+pipeline {
+  agent any
+
+  stages {
+    stage('Clone Repository') {
+      steps {
+        git url: 'https://github.com/<your_username>/flask-sample-webapp.git', branch: 'main'
+      }
+    }
+
+    stage('Build Docker Image') {
+      steps {
+        sh 'docker build -t flask-demo-app .'
+      }
+    }
+
+    stage('Run Container') {
+      steps {
+        sh 'docker stop flask-container || true'
+        sh 'docker rm flask-container || true'
+        sh 'docker run -d --name flask-container -p 5000:5000 flask-demo-app'
+      }
+    }
+
+    stage('Push to Docker Hub') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+          sh '''
+            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+            docker tag flask-demo-app $DOCKER_USER/flask-demo-app:latest
+            docker push $DOCKER_USER/flask-demo-app:latest
+          '''
+        }
+      }
     }
   }
 }
-
 ```
+---
+## Step 3: Build your pipeline
+1. Go to your Jenkins Server at ```http://<your_vm_ip>:8080```
+2. Go to your Job
+3. Click on ***Build Now***
 
-> ⚠️ You must have already logged in to Azure or use a service principal for headless access.
+### Step 3.1: Verify your Image has been published to DockerHub
+
+1. Go to DockerHub
+2. Browse your repositories
+3. Verify that the new version with `latest` tag is added
 
 ---
-
-## ✅ Final Jenkinsfile Structure Overview
-Your Jenkinsfile should now include:
-- Clone repo
-- Build image
-- Run locally
-- Push to Docker Hub
-- (Optional) Deploy to Azure
-
----
-
-## 🖥️ Verification
-1. Go to Docker Hub and verify your image was pushed
-2. Visit your Azure app URL:
-```
-https://flask-webapp-demo.azurewebsites.net
-```
-3. Your Flask app should load successfully
-
----
-
-## 🎉 You Did It!
-You’ve now built a full DevOps CI/CD pipeline — from GitHub to Docker Hub to Azure App Service, fully automated via Jenkins!
+## 🚀 What’s Next?
+In [Lab 7](./lab7/lab7.md), you will:
+- Automatically deploy code to Azure App Service using GitHub integration
+- Trigger a Jenkins job via webhook to build and push a Docker image to Docker Hub

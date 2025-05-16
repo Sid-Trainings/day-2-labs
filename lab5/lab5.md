@@ -1,9 +1,8 @@
-# Lab 5: Jenkins Pipeline for Local CI/CD
+# Lab 5: Jenkins Pipeline for Local CI
 
 ## 🧠 Objective
 By the end of this lab, you will be able to:
 - Create a Jenkins Pipeline for building, testing, and deploying a Dockerized app
-- Trigger the pipeline using GitHub code changes
 - Deploy the app locally using Docker via Jenkins
 
 ---
@@ -196,6 +195,6 @@ git push origin main
 ---
 
 ## 🚀 What’s Next?
-In **Lab 6**, you will:
+In [Lab 6](./lab6/lab6.md), you will:
 - Push the Docker image to Docker Hub
 - Deploy it to Azure App Service via Jenkins pipeline

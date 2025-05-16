@@ -87,7 +87,7 @@ You should now see the Jenkins dashboard.
 ---
 
 ## 🚀 What’s Next?
-In the next lab, you’ll:
+In the [Lab 3](./lab3/lab3.md), you’ll:
 - Clone a GitHub repository
 - Containerize the application
 - Push it to Docker Hub
