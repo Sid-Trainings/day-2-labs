@@ -75,6 +75,18 @@ docker run -d \
   jenkins/jenkins:lts
 ```
 
+### 3.3 Remove your local python app from Docker socket
+```bash
+docker ps
+```
+
+Note the Container ID or Container Name of your local python app. At this point you should have 2, one for Jenkins and one for your local Python Flask App
+
+```bash
+docker stop <your_flask_app_container_id_or_name>
+docker rm <your_flask_app_container_id_or_name>
+```
+
 ---
 
 ## 🧰 Step 4: Install Docker CLI Inside Jenkins Container
@@ -117,6 +129,11 @@ Type `exit` to leave the container.
 
 In the root of your Flask repo, create a file named `Jenkinsfile`:
 
+1. nano ```Jenkinsfile```
+2. Copy the below code and paste into Nano editor
+
+> Modify the file below to replace <your-github-username> with your actual GitHub username
+
 ```groovy
 pipeline {
   agent any
@@ -146,6 +163,8 @@ pipeline {
 ```
 
 > 🔁 Replace `<your-github-username>` with your actual GitHub username.
+
+3. Save and Exit the nano editor using **Ctrl+O** --> press **Enter** --> **Crtl+X**
 
 ### 6.1 Push Jenkinsfile to GitHub
 ```bash
