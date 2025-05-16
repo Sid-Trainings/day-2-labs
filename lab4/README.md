@@ -24,7 +24,7 @@ In your desktop go to following address:
 
 ## 👤 Step 1: Login to Docker Hub
 ```bash
-docker login
+docker login -u <your_username>
 ```
 Enter your Docker Hub **username and password** when prompted.
 
