@@ -50,12 +50,31 @@ sudo yum remove docker \
                 docker-engine
 ```
 
-### 2.2 Set up the Docker repository
+### 2.2 Set up the Docker repository (Redhat/CentOS)
 ```bash
 sudo yum install -y yum-utils
 sudo yum-config-manager \
     --add-repo \
     https://download.docker.com/linux/rhel/docker-ce.repo
+```
+### 2.2(a) Set up the Docker repository (Debian)
+```bash
+sudo apt update
+sudo apt install -y apt-transport-https ca-certificates curl gnupg lsb-release
+
+# Add Docker’s official GPG key
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# Add Docker’s stable repository
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] \
+  https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Update and install Docker
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io
+
 ```
 
 ### 2.3 Install Docker Engine
