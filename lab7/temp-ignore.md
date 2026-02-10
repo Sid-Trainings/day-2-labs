@@ -30,6 +30,7 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
 | approval-rejected | deliverableId, deliverableTitle, decidedByName, comment, baseUrl, actionUrl |
 | approval-approved | deliverableId, deliverableTitle, decidedByName, comment, baseUrl, actionUrl |
 | approval-requested | deliverableId, deliverableTitle, campaignId, approvalLevel, baseUrl, actionUrl |
+| version-uploaded | recipientName, deliverableTitle, campaignName, creatorName, versionNumber, baseUrl, actionUrl |
 
 ---
 
@@ -287,15 +288,13 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
               <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.5; color: #3f3f46;">
                 Great news! <strong>{{payload.approverName}}</strong> has approved your deliverable.
               </p>
-              {{#if payload.comment}}
-              <!-- Comment Box -->
+              <!-- Comment Box (shows if comment exists) -->
               <div style="background-color: #f0fdf4; border-left: 4px solid #16a34a; padding: 16px 20px; margin: 0 0 24px; border-radius: 0 4px 4px 0;">
                 <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #166534; text-transform: uppercase;">Comment</p>
                 <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #166534;">
                   {{payload.comment}}
                 </p>
               </div>
-              {{/if}}
               <!-- CTA Button -->
               <table role="presentation" cellspacing="0" cellpadding="0">
                 <tr>
@@ -404,14 +403,12 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
                       <p style="margin: 4px 0 0; font-size: 15px; color: #18181b;">{{payload.deliverableTitle}}</p>
                     </td>
                   </tr>
-                  {{#if payload.dueDate}}
                   <tr>
                     <td style="padding: 8px 0;">
                       <span style="font-size: 13px; color: #71717a; text-transform: uppercase; font-weight: 600;">Due Date</span>
                       <p style="margin: 4px 0 0; font-size: 15px; color: #18181b;">{{payload.dueDate}}</p>
                     </td>
                   </tr>
-                  {{/if}}
                 </table>
               </div>
               <!-- CTA Button -->
@@ -448,7 +445,7 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
 
 ```json
 {
-  "body": "You've been assigned a new deliverable: \"{{payload.deliverableTitle}}\" for {{payload.campaignName}}{{#if payload.dueDate}} (Due: {{payload.dueDate}}){{/if}}",
+  "body": "You've been assigned a new deliverable: \"{{payload.deliverableTitle}}\" for {{payload.campaignName}}. Due: {{payload.dueDate}}",
   "avatar": null,
   "redirect": {
     "url": "{{payload.actionUrl}}"
@@ -690,7 +687,6 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
               <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.5; color: #3f3f46;">
                 <strong>{{payload.creatorName}}</strong> has submitted a counter proposal for <strong>{{payload.campaignName}}</strong>.
               </p>
-              {{#if payload.rateAmount}}
               <!-- Rate Box -->
               <div style="background-color: #fef3c7; border-left: 4px solid #d97706; padding: 16px 20px; margin: 0 0 24px; border-radius: 0 4px 4px 0;">
                 <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #92400e; text-transform: uppercase;">Proposed Rate</p>
@@ -698,7 +694,6 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
                   {{payload.rateCurrency}} {{payload.rateAmount}}
                 </p>
               </div>
-              {{/if}}
               <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.5; color: #3f3f46;">
                 Review the counter proposal and respond to the creator.
               </p>
@@ -736,7 +731,7 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
 
 ```json
 {
-  "body": "{{payload.creatorName}} countered the proposal for \"{{payload.campaignName}}\"{{#if payload.rateAmount}} with {{payload.rateCurrency}} {{payload.rateAmount}}{{/if}}",
+  "body": "{{payload.creatorName}} countered the proposal for \"{{payload.campaignName}}\" with {{payload.rateCurrency}} {{payload.rateAmount}}",
   "avatar": null,
   "redirect": {
     "url": "{{payload.actionUrl}}"
@@ -891,7 +886,6 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
               <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.5; color: #3f3f46;">
                 You've received a new proposal for the campaign <strong>{{payload.campaignName}}</strong>.
               </p>
-              {{#if payload.rateAmount}}
               <!-- Rate Box -->
               <div style="background-color: #eff6ff; border-left: 4px solid #2563eb; padding: 16px 20px; margin: 0 0 24px; border-radius: 0 4px 4px 0;">
                 <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1e40af; text-transform: uppercase;">Proposed Rate</p>
@@ -899,7 +893,6 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
                   {{payload.rateAmount}}
                 </p>
               </div>
-              {{/if}}
               <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.5; color: #3f3f46;">
                 Review the proposal details and respond at your convenience.
               </p>
@@ -937,7 +930,7 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
 
 ```json
 {
-  "body": "You've received a new proposal for \"{{payload.campaignName}}\"{{#if payload.rateAmount}} at {{payload.rateAmount}}{{/if}}",
+  "body": "You've received a new proposal for \"{{payload.campaignName}}\" at {{payload.rateAmount}}",
   "avatar": null,
   "redirect": {
     "url": "{{payload.actionUrl}}"
@@ -1084,15 +1077,13 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
               <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.5; color: #3f3f46;">
                 <strong>{{payload.decidedByName}}</strong> has rejected the deliverable <strong>"{{payload.deliverableTitle}}"</strong>.
               </p>
-              {{#if payload.comment}}
-              <!-- Comment Box -->
+              <!-- Feedback Box -->
               <div style="background-color: #fef2f2; border-left: 4px solid #dc2626; padding: 16px 20px; margin: 0 0 24px; border-radius: 0 4px 4px 0;">
                 <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #991b1b; text-transform: uppercase;">Feedback</p>
                 <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #7f1d1d;">
                   {{payload.comment}}
                 </p>
               </div>
-              {{/if}}
               <!-- CTA Button -->
               <table role="presentation" cellspacing="0" cellpadding="0">
                 <tr>
@@ -1127,7 +1118,7 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
 
 ```json
 {
-  "body": "{{payload.decidedByName}} rejected \"{{payload.deliverableTitle}}\"{{#if payload.comment}}: {{payload.comment}}{{/if}}",
+  "body": "{{payload.decidedByName}} rejected \"{{payload.deliverableTitle}}\": {{payload.comment}}",
   "avatar": null,
   "redirect": {
     "url": "{{payload.actionUrl}}"
@@ -1189,7 +1180,6 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
               <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.5; color: #3f3f46;">
                 <strong>{{payload.decidedByName}}</strong> has approved the deliverable <strong>"{{payload.deliverableTitle}}"</strong>.
               </p>
-              {{#if payload.comment}}
               <!-- Comment Box -->
               <div style="background-color: #f0fdf4; border-left: 4px solid #16a34a; padding: 16px 20px; margin: 0 0 24px; border-radius: 0 4px 4px 0;">
                 <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #166534; text-transform: uppercase;">Comment</p>
@@ -1197,7 +1187,6 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
                   {{payload.comment}}
                 </p>
               </div>
-              {{/if}}
               <!-- CTA Button -->
               <table role="presentation" cellspacing="0" cellpadding="0">
                 <tr>
@@ -1232,7 +1221,7 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
 
 ```json
 {
-  "body": "{{payload.decidedByName}} approved \"{{payload.deliverableTitle}}\"{{#if payload.comment}}: {{payload.comment}}{{/if}}",
+  "body": "{{payload.decidedByName}} approved \"{{payload.deliverableTitle}}\": {{payload.comment}}",
   "avatar": null,
   "redirect": {
     "url": "{{payload.actionUrl}}"
@@ -1355,6 +1344,116 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
 
 ---
 
+## 14. version-uploaded
+
+### Payload Variables
+```json
+{
+  "recipientName": "string",
+  "deliverableTitle": "string",
+  "campaignName": "string",
+  "creatorName": "string",
+  "versionNumber": "number",
+  "baseUrl": "string",
+  "actionUrl": "string"
+}
+```
+
+### Email Template
+
+**Subject:** New version uploaded for "{{payload.deliverableTitle}}"
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Version Uploaded</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f4f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f4f4f5;">
+    <tr>
+      <td align="center" style="padding: 40px 20px;">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="padding: 32px 40px 24px; border-bottom: 1px solid #e4e4e7;">
+              <div style="display: inline-block; padding: 6px 12px; background-color: #eff6ff; border-radius: 4px; margin-bottom: 16px;">
+                <span style="font-size: 13px; font-weight: 600; color: #2563eb;">NEW VERSION</span>
+              </div>
+              <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #18181b;">{{payload.deliverableTitle}}</h1>
+            </td>
+          </tr>
+          <!-- Body -->
+          <tr>
+            <td style="padding: 32px 40px;">
+              <p style="margin: 0 0 16px; font-size: 16px; line-height: 1.5; color: #3f3f46;">
+                Hi {{payload.recipientName}},
+              </p>
+              <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.5; color: #3f3f46;">
+                <strong>{{payload.creatorName}}</strong> has uploaded a new version of <strong>"{{payload.deliverableTitle}}"</strong> for the campaign <strong>{{payload.campaignName}}</strong>.
+              </p>
+              <!-- Version Box -->
+              <div style="background-color: #eff6ff; border-left: 4px solid #2563eb; padding: 16px 20px; margin: 0 0 24px; border-radius: 0 4px 4px 0;">
+                <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1e40af; text-transform: uppercase;">Version Number</p>
+                <p style="margin: 0; font-size: 24px; font-weight: 700; color: #1e3a8a;">
+                  v{{payload.versionNumber}}
+                </p>
+              </div>
+              <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.5; color: #3f3f46;">
+                Review the new version and provide feedback or submit for approval.
+              </p>
+              <!-- CTA Button -->
+              <table role="presentation" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td style="border-radius: 6px; background-color: #6366f1;">
+                    <a href="{{payload.baseUrl}}{{payload.actionUrl}}" target="_blank" style="display: inline-block; padding: 14px 28px; font-size: 16px; font-weight: 600; color: #ffffff; text-decoration: none;">
+                      Review Version
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 24px 40px; background-color: #fafafa; border-top: 1px solid #e4e4e7; border-radius: 0 0 8px 8px;">
+              <p style="margin: 0; font-size: 13px; color: #71717a; text-align: center;">
+                You're receiving this because you're part of the agency team managing this campaign.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+```
+
+### In-App Notification
+
+**Configuration:** Use primary action button
+
+```json
+{
+  "body": "{{payload.creatorName}} uploaded v{{payload.versionNumber}} of \"{{payload.deliverableTitle}}\" for {{payload.campaignName}}",
+  "avatar": null,
+  "redirect": {
+    "url": "{{payload.actionUrl}}"
+  },
+  "primaryAction": {
+    "label": "Review",
+    "redirect": {
+      "url": "{{payload.actionUrl}}"
+    }
+  }
+}
+```
+
+---
+
 ## Novu Workflow Configuration Summary
 
 | Workflow ID | Email | In-App | Action Buttons |
@@ -1372,6 +1471,7 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
 | approval-rejected | Yes | Yes | View |
 | approval-approved | Yes | Yes | None (redirect only) |
 | approval-requested | Yes | Yes | Review |
+| version-uploaded | Yes | Yes | Review |
 
 ---
 
