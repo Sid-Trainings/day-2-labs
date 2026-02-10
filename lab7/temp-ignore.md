@@ -8,27 +8,28 @@ This document contains all HTML email templates and In-App notification configur
 All variables in Novu templates use the format: `{{payload.variableName}}`
 
 ### URL Handling
-- **Full URLs**: Some workflows pass complete URLs (with baseUrl) in `actionUrl`
-- **Relative URLs**: Some workflows pass relative paths - these need `{{payload.baseUrl}}` prepended
-- **Magic Links**: Authentication workflows pass complete Firebase magic links
+- **baseUrl + actionUrl**: All workflows now pass `baseUrl` (full origin like `https://app.truleado.com`) and `actionUrl` (relative path like `/dashboard/deliverables/123`)
+- **Email templates**: Use `{{payload.baseUrl}}{{payload.actionUrl}}` for CTA buttons
+- **In-App notifications**: Can use just `{{payload.actionUrl}}` (relative) since they're rendered in-app
+- **Magic Links**: Authentication workflows pass complete Firebase magic links directly
 
 ### Current Payload Variables by Workflow
 
 | Workflow | Variables Passed |
 |----------|------------------|
-| deliverable-comment | recipientName, deliverableTitle, campaignName, commentByName, message, actionUrl (full URL) |
-| deliverable-rejected-creator | creatorName, deliverableTitle, approverName, comment, actionUrl (relative) |
-| deliverable-approved-creator | creatorName, deliverableTitle, approverName, comment, actionUrl (relative) |
-| deliverable-assigned | creatorName, deliverableTitle, campaignName, dueDate, actionUrl (relative) |
+| deliverable-comment | recipientName, deliverableTitle, campaignName, commentByName, message, baseUrl, actionUrl |
+| deliverable-rejected-creator | creatorName, deliverableTitle, approverName, comment, baseUrl, actionUrl |
+| deliverable-approved-creator | creatorName, deliverableTitle, approverName, comment, baseUrl, actionUrl |
+| deliverable-assigned | creatorName, deliverableTitle, campaignName, dueDate, baseUrl, actionUrl |
 | creator-magic-link | email, link, expiresInMinutes |
-| proposal-rejected | creatorName, campaignName, reason, actionUrl (relative) |
-| proposal-countered | creatorName, campaignName, rateAmount, rateCurrency, actionUrl (relative) |
-| proposal-accepted | creatorName, campaignName, actionUrl (relative) |
+| proposal-rejected | creatorName, campaignName, reason, baseUrl, actionUrl |
+| proposal-countered | creatorName, campaignName, rateAmount, rateCurrency, baseUrl, actionUrl |
+| proposal-accepted | creatorName, campaignName, baseUrl, actionUrl |
 | proposal-sent | creatorName, campaignName, rateAmount (formatted), rateCurrency, actionUrl (full URL) |
 | client-magic-link | email, magicLink, expiresInMinutes, sentAt |
-| approval-rejected | deliverableId, deliverableTitle, decidedByName, comment, actionUrl (relative) |
-| approval-approved | deliverableId, deliverableTitle, decidedByName, comment, actionUrl (relative) |
-| approval-requested | deliverableId, deliverableTitle, campaignId, approvalLevel, actionUrl (relative) |
+| approval-rejected | deliverableId, deliverableTitle, decidedByName, comment, baseUrl, actionUrl |
+| approval-approved | deliverableId, deliverableTitle, decidedByName, comment, baseUrl, actionUrl |
+| approval-requested | deliverableId, deliverableTitle, campaignId, approvalLevel, baseUrl, actionUrl |
 
 ---
 
@@ -42,7 +43,7 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
   "campaignName": "string",
   "commentByName": "string",
   "message": "string",
-  "actionUrl": "string (full URL)"
+  "actionUrl": "string (full URL with baseUrl prepended)"
 }
 ```
 
@@ -137,11 +138,10 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
   "deliverableTitle": "string",
   "approverName": "string",
   "comment": "string",
-  "actionUrl": "string (relative path - needs baseUrl)"
+  "baseUrl": "string",
+  "actionUrl": "string"
 }
 ```
-
-**Note:** This workflow needs `baseUrl` added to payload. Update trigger in `src/lib/novu/workflows/creator.ts`
 
 ### Email Template
 
@@ -247,11 +247,10 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
   "deliverableTitle": "string",
   "approverName": "string",
   "comment": "string (optional)",
-  "actionUrl": "string (relative path - needs baseUrl)"
+  "baseUrl": "string",
+  "actionUrl": "string"
 }
 ```
-
-**Note:** This workflow needs `baseUrl` added to payload. Update trigger in `src/lib/novu/workflows/creator.ts`
 
 ### Email Template
 
@@ -350,11 +349,10 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
   "deliverableTitle": "string",
   "campaignName": "string",
   "dueDate": "string (optional, ISO date)",
-  "actionUrl": "string (relative path - needs baseUrl)"
+  "baseUrl": "string",
+  "actionUrl": "string"
 }
 ```
-
-**Note:** This workflow needs `baseUrl` added to payload. Update trigger in `src/lib/novu/workflows/creator.ts`
 
 ### Email Template
 
@@ -558,11 +556,10 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
   "creatorName": "string",
   "campaignName": "string",
   "reason": "string",
-  "actionUrl": "string (relative path - needs baseUrl)"
+  "baseUrl": "string",
+  "actionUrl": "string"
 }
 ```
-
-**Note:** This workflow needs `baseUrl` added to payload. Update trigger in `src/lib/novu/workflows/creator.ts`
 
 ### Email Template
 
@@ -656,11 +653,10 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
   "campaignName": "string",
   "rateAmount": "number (optional, in smallest currency unit)",
   "rateCurrency": "string (optional, e.g., 'INR', 'USD')",
-  "actionUrl": "string (relative path - needs baseUrl)"
+  "baseUrl": "string",
+  "actionUrl": "string"
 }
 ```
-
-**Note:** This workflow needs `baseUrl` added to payload. Update trigger in `src/lib/novu/workflows/creator.ts`
 
 ### Email Template
 
@@ -763,11 +759,10 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
 {
   "creatorName": "string",
   "campaignName": "string",
-  "actionUrl": "string (relative path - needs baseUrl)"
+  "baseUrl": "string",
+  "actionUrl": "string"
 }
 ```
-
-**Note:** This workflow needs `baseUrl` added to payload. Update trigger in `src/lib/novu/workflows/creator.ts`
 
 ### Email Template
 
@@ -1052,11 +1047,10 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
   "deliverableTitle": "string",
   "decidedByName": "string",
   "comment": "string (optional)",
-  "actionUrl": "string (relative path - needs baseUrl)"
+  "baseUrl": "string",
+  "actionUrl": "string"
 }
 ```
-
-**Note:** This workflow needs `baseUrl` added to payload. Update trigger in `src/graphql/resolvers/mutations/deliverable.ts`
 
 ### Email Template
 
@@ -1158,11 +1152,10 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
   "deliverableTitle": "string",
   "decidedByName": "string",
   "comment": "string (optional)",
-  "actionUrl": "string (relative path - needs baseUrl)"
+  "baseUrl": "string",
+  "actionUrl": "string"
 }
 ```
-
-**Note:** This workflow needs `baseUrl` added to payload. Update trigger in `src/graphql/resolvers/mutations/deliverable.ts`
 
 ### Email Template
 
@@ -1258,11 +1251,10 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
   "deliverableTitle": "string",
   "campaignId": "string",
   "approvalLevel": "string ('internal', 'project', 'client')",
-  "actionUrl": "string (relative path - needs baseUrl)"
+  "baseUrl": "string",
+  "actionUrl": "string"
 }
 ```
-
-**Note:** This workflow needs `baseUrl` added to payload. Update trigger in `src/graphql/resolvers/mutations/deliverable.ts`
 
 ### Email Template
 
@@ -1359,121 +1351,6 @@ All variables in Novu templates use the format: `{{payload.variableName}}`
     }
   }
 }
-```
-
----
-
-## Required Code Changes for baseUrl
-
-Several workflows pass relative URLs that need to be converted to full URLs for email templates to work correctly. Here are the changes needed:
-
-### In `src/lib/novu/workflows/creator.ts`
-
-Add `baseUrl` to the following functions:
-
-1. **notifyDeliverableAssigned** - Add to data payload:
-```typescript
-data: {
-  creatorName,
-  deliverableTitle,
-  campaignName,
-  dueDate,
-  baseUrl: getBaseUrl(),  // ADD THIS
-  actionUrl: `/creator/deliverables/${deliverableId}`,
-},
-```
-
-2. **notifyCreatorDeliverableApproved** - Add to data payload:
-```typescript
-data: {
-  creatorName,
-  deliverableTitle,
-  approverName,
-  comment: comment ?? '',
-  baseUrl: getBaseUrl(),  // ADD THIS
-  actionUrl: `/creator/deliverables/${deliverableId}`,
-},
-```
-
-3. **notifyCreatorDeliverableRejected** - Add to data payload:
-```typescript
-data: {
-  creatorName,
-  deliverableTitle,
-  approverName,
-  comment,
-  baseUrl: getBaseUrl(),  // ADD THIS
-  actionUrl: `/creator/deliverables/${deliverableId}`,
-},
-```
-
-4. **notifyProposalAccepted** - Add to data payload:
-```typescript
-data: {
-  creatorName,
-  campaignName,
-  baseUrl: getBaseUrl(),  // ADD THIS
-  actionUrl: `/dashboard/campaigns/${campaignId}`,
-},
-```
-
-5. **notifyProposalCountered** - Add to data payload:
-```typescript
-data: {
-  creatorName,
-  campaignName,
-  rateAmount,
-  rateCurrency,
-  baseUrl: getBaseUrl(),  // ADD THIS
-  actionUrl: `/dashboard/campaigns/${campaignId}`,
-},
-```
-
-6. **notifyProposalRejected** - Add to data payload:
-```typescript
-data: {
-  creatorName,
-  campaignName,
-  reason: reason ?? 'No reason provided',
-  baseUrl: getBaseUrl(),  // ADD THIS
-  actionUrl: `/dashboard/campaigns/${campaignId}`,
-},
-```
-
-### In `src/graphql/resolvers/mutations/deliverable.ts`
-
-1. **notifyApprovalRequested** - Add baseUrl:
-```typescript
-function getBaseUrl(): string {
-  const url = process.env.NEXT_PUBLIC_APP_URL?.trim()
-    || process.env.NEXT_PUBLIC_URL?.trim()
-    || process.env.VERCEL_URL?.trim()
-    || 'http://localhost:3000';
-  const fullUrl = url.startsWith('http') ? url : `https://${url}`;
-  return fullUrl.replace(/\/$/, '');
-}
-
-// In notifyApprovalRequested:
-data: {
-  deliverableId,
-  deliverableTitle,
-  campaignId,
-  approvalLevel,
-  baseUrl: getBaseUrl(),  // ADD THIS
-  actionUrl: `/dashboard/deliverables/${deliverableId}`,
-},
-```
-
-2. **notifyApprovalDecided** - Add baseUrl:
-```typescript
-data: {
-  deliverableId,
-  deliverableTitle,
-  decidedByName,
-  comment: comment ?? undefined,
-  baseUrl: getBaseUrl(),  // ADD THIS
-  actionUrl: `/dashboard/deliverables/${deliverableId}`,
-},
 ```
 
 ---
